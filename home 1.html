@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCD Motors — Marketplace de veículos adaptados para PcD</title>
+<meta name="description" content="O único marketplace que filtra veículos por tipo de adaptação — comando manual, elevador de cadeira, embreagem automatizada — com laudo do Detran conferido.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%20fill%3D%27none%27%3E%3Cpath%20d%3D%27M47.4%2033.3A18%2018%200%201%201%2036.2%2021.1%27%20stroke%3D%27%2314284b%27%20stroke-width%3D%276.5%27%20stroke-linecap%3D%27round%27%2F%3E%3Cpath%20d%3D%27M30%2038L50%2014%27%20stroke%3D%27%230aab8f%27%20stroke-width%3D%277%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2738%27%20r%3D%275.4%27%20fill%3D%27%2314284b%27%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --night:      #0a1424;
+  --night-2:    #101d33;
+  --night-3:    #16263f;
+  --night-line: #21334f;
+  --night-text: #eaf0fb;
+  --night-mute: #8698ba;
+  --navy:     #14284b;
+  --teal:     #0aab8f;
+  --teal-lit: #2fe3bd;
+  --paper:   #f2f4f7;
+  --surface: #ffffff;
+  --sunken:  #e9edf3;
+  --ink:     #0d1b30;
+  --muted:   #5b6880;
+  --line:    #dce2ec;
+  --line-2:  #eceff5;
+  --fav-bg: rgba(255,255,255,.92);
+  --fav-fg: #14284b;
+  --tick: rgba(47, 227, 189, .55);
+  --shadow: 0 1px 2px rgba(13,27,48,.05), 0 8px 24px -12px rgba(13,27,48,.18);
+  --shadow-lift: 0 2px 4px rgba(13,27,48,.06), 0 22px 44px -20px rgba(13,27,48,.30);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15.5px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+h1, h2, h3 { font-family: "Bricolage Grotesque", "IBM Plex Sans", sans-serif; font-weight: 800; letter-spacing: -.03em; line-height: 1.04; margin: 0; text-wrap: balance; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; border: none; background: none; cursor: pointer; }
+.shell { max-width: 1240px; margin: 0 auto; padding: 0 40px; }
+.eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* HEADER */
+.site-head { position: sticky; top: 0; z-index: 50; background: transparent; transition: background .3s var(--ease), border-color .3s var(--ease); border-bottom: 1px solid transparent; }
+.site-head.stuck { background: rgba(10,20,36,.86); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom-color: var(--night-line); }
+.site-head .shell { display: flex; align-items: center; gap: 34px; padding-top: 16px; padding-bottom: 16px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand svg { width: 40px; height: 40px; flex-shrink: 0; display: block; }
+.brand .wm b { display: block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -.03em; color: var(--night-text); line-height: 1.05; }
+.brand .wm span { display: block; font-family: "IBM Plex Mono", monospace; font-size: 8.5px; letter-spacing: .16em; color: var(--teal-lit); padding-top: 2px; }
+.site-nav { display: flex; gap: 26px; margin-left: 12px; }
+.site-nav a { font-size: 14.5px; font-weight: 500; color: var(--night-mute); padding: 4px 0; position: relative; transition: color .2s var(--ease); }
+.site-nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -2px; height: 1.5px; background: var(--teal-lit); transition: right .28s var(--ease); }
+.site-nav a:hover { color: var(--night-text); }
+.site-nav a:hover::after { right: 0; }
+.site-nav a[aria-current] { color: var(--night-text); }
+.site-nav a[aria-current]::after { right: 0; }
+.head-cta { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 7px; font-size: 14px; font-weight: 600; letter-spacing: -.005em; transition: transform .18s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease); }
+.btn:active { transform: translateY(1px); }
+.btn-teal { background: var(--teal-lit); color: #05221c; }
+.btn-teal:hover { background: #4df0cd; box-shadow: 0 8px 24px -8px rgba(47,227,189,.5); }
+.btn-wire { border: 1px solid var(--night-line); color: var(--night-text); background: rgba(255,255,255,.03); }
+.btn-wire:hover { background: rgba(255,255,255,.08); }
+.btn-ink { background: var(--navy); color: #fff; }
+.btn-ink:hover { background: #1c3865; }
+.btn-quiet { border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
+.btn-quiet:hover { border-color: var(--muted); }
+.btn-lg { padding: 14px 26px; font-size: 15px; }
+
+/* HERO */
+.hero { background: var(--night); color: var(--night-text); position: relative; overflow: hidden; margin-top: -73px; padding-top: 73px; }
+.hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(120,160,220,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(120,160,220,.045) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(115% 85% at 72% 8%, #000 25%, transparent 78%); -webkit-mask-image: radial-gradient(115% 85% at 72% 8%, #000 25%, transparent 78%); pointer-events: none; }
+.hero::after { content: ""; position: absolute; width: 780px; height: 780px; right: -240px; top: -400px; background: radial-gradient(circle, rgba(10,171,143,.20), transparent 62%); pointer-events: none; }
+.hero .shell { position: relative; z-index: 2; }
+.hero-top { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(0,.55fr); gap: 56px; align-items: end; padding: 74px 0 52px; }
+.hero-eyebrow { color: var(--teal-lit); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.hero-eyebrow::before { content: ""; width: 26px; height: 1.5px; background: var(--teal-lit); display: block; }
+.hero h1 { font-size: clamp(36px, 4.9vw, 59px); text-wrap: pretty; margin-bottom: 22px; }
+.hero h1 .strike { position: relative; white-space: nowrap; }
+.hero h1 .strike::after { content: ""; position: absolute; left: -.04em; right: -.04em; top: 56%; height: 4px; background: #ff5c5c; border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease) .8s; }
+.hero.lit h1 .strike::after { transform: scaleX(1); }
+.hero-lead { font-size: 17.5px; line-height: 1.62; color: #b9c8e2; max-width: 56ch; }
+.hero-lead b { color: var(--night-text); font-weight: 600; }
+.hero-figures { display: flex; flex-direction: column; gap: 2px; }
+.figure { display: flex; align-items: baseline; gap: 14px; padding: 13px 0; border-top: 1px solid var(--night-line); }
+.figure:last-child { border-bottom: 1px solid var(--night-line); }
+.figure b { font-family: "Bricolage Grotesque", sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -.03em; color: var(--night-text); min-width: 84px; }
+.figure span { font-size: 13px; color: var(--night-mute); line-height: 1.35; }
+
+/* INSTRUMENT */
+.instrument { position: relative; background: linear-gradient(180deg, var(--night-2), #0c1728); border: 1px solid var(--night-line); border-radius: 4px; margin-bottom: 72px; }
+.inst-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 15px 22px; border-bottom: 1px solid var(--night-line); }
+.inst-head .eyebrow { color: var(--night-mute); }
+.inst-head .live { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--teal-lit); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal-lit); box-shadow: 0 0 0 0 rgba(47,227,189,.6); animation: pulse 2.4s var(--ease) infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(47,227,189,.55); } 70% { box-shadow: 0 0 0 8px rgba(47,227,189,0); } 100% { box-shadow: 0 0 0 0 rgba(47,227,189,0); } }
+.inst-body { display: grid; grid-template-columns: minmax(0,1fr) 250px; gap: 0; }
+.chips-pane { padding: 22px; border-right: 1px solid var(--night-line); }
+.chips-label { color: var(--night-mute); margin-bottom: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 9px; padding: 10px 15px 10px 12px; border: 1px solid var(--night-line); border-radius: 6px; background: rgba(255,255,255,.025); color: #c3d1e8; font-size: 13.5px; font-weight: 500; transition: border-color .2s var(--ease), background .2s var(--ease), color .2s var(--ease), transform .2s var(--ease); }
+.chip svg { width: 17px; height: 17px; opacity: .75; transition: opacity .2s; }
+.chip .n { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--night-mute); font-variant-numeric: tabular-nums; }
+.chip:hover { border-color: #33507c; background: rgba(255,255,255,.06); color: var(--night-text); }
+.chip[aria-pressed="true"] { background: rgba(47,227,189,.13); border-color: rgba(47,227,189,.55); color: #d9fff5; }
+.chip[aria-pressed="true"] svg { opacity: 1; color: var(--teal-lit); }
+.chip[aria-pressed="true"] .n { color: var(--teal-lit); }
+.chip.ping { transform: translateY(-2px); }
+
+/* RECOMENDAÇÃO ALERT */
+.recom-alert {
+  background: rgba(47,227,189,.1); border: 1px solid rgba(47,227,189,.3);
+  padding: 10px 15px; border-radius: 6px; margin-bottom: 15px;
+  display: none; align-items: center; gap: 10px; font-size: 13px; color: #d9fff5;
+}
+.recom-alert.show { display: flex; }
+.recom-alert svg { width: 16px; height: 16px; color: var(--teal-lit); }
+
+.readout { padding: 22px; display: flex; flex-direction: column; justify-content: center; gap: 3px; background: rgba(255,255,255,.015); }
+.readout .count { font-family: "Bricolage Grotesque", sans-serif; font-size: 62px; font-weight: 800; letter-spacing: -.045em; line-height: .92; color: var(--teal-lit); font-variant-numeric: tabular-nums; }
+.readout .cap { font-size: 13px; color: var(--night-mute); line-height: 1.4; }
+.readout .of { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #64769a; margin-top: 8px; letter-spacing: .04em; }
+.strip-wrap { border-top: 1px solid var(--night-line); }
+.strip { display: flex; gap: 12px; padding: 18px 22px; overflow-x: auto; scrollbar-width: thin; }
+.mini { flex: 0 0 236px; border: 1px solid var(--night-line); border-radius: 5px; background: rgba(255,255,255,.028); padding: 13px 14px; display: flex; flex-direction: column; gap: 7px; transition: border-color .2s var(--ease), background .2s var(--ease); }
+.mini:hover { border-color: #33507c; background: rgba(255,255,255,.06); }
+.mini .mtag { display: inline-flex; align-items: center; gap: 6px; font-family: "IBM Plex Mono", monospace; font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--teal-lit); }
+.mini .mtag svg { width: 13px; height: 13px; }
+.mini h4 { font-size: 14.5px; font-weight: 600; margin: 0; color: var(--night-text); letter-spacing: -.01em; }
+.mini .mrow { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--night-mute); }
+.mini .mprice { color: var(--night-text); font-weight: 600; font-size: 13px; }
+.empty { padding: 26px 22px; color: var(--night-mute); font-size: 14px; }
+
+/* SECTIONS (light) */
+.band { padding: 82px 0; }
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1.5px solid var(--ink); margin-bottom: 34px; }
+.sec-head .eyebrow { color: var(--teal); display: block; margin-bottom: 12px; }
+.sec-head h2 { font-size: clamp(26px, 3.4vw, 38px); }
+.sec-head p { margin: 8px 0 0; color: var(--muted); font-size: 15px; max-width: 46ch; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); gap: 20px; }
+.card { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); border-color: color-mix(in srgb, var(--teal) 45%, var(--line)); }
+.shot { position: relative; aspect-ratio: 16 / 10; background: linear-gradient(163deg, #dfe7f4 0%, #eef2f9 46%, #e4ebf6 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.shot .ghost { width: 58%; height: 58%; color: var(--navy); opacity: .13; }
+.seal { position: absolute; top: 11px; left: 11px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 7px; background: var(--navy); color: #fff; border-radius: 4px; font-family: "IBM Plex Mono", monospace; font-size: 9.5px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; }
+.seal svg { width: 12px; height: 12px; color: var(--teal-lit); }
+.card-body { padding: 16px 17px 17px; display: flex; flex-direction: column; gap: 11px; }
+.adapt-tag { display: inline-flex; align-items: center; gap: 7px; align-self: flex-start; padding: 5px 10px 5px 8px; border-radius: 5px; background: color-mix(in srgb, var(--teal) 12%, transparent); color: color-mix(in srgb, var(--teal) 82%, var(--ink)); font-size: 11.5px; font-weight: 600; letter-spacing: -.005em; }
+.adapt-tag svg { width: 14px; height: 14px; }
+.card h3 { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.spec { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: 10px 0; gap: 8px; }
+.spec div span { display: block; font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1px; }
+.spec div b { font-size: 13px; font-weight: 600; }
+.card-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.price { font-family: "Bricolage Grotesque", sans-serif; font-size: 23px; font-weight: 700; letter-spacing: -.035em; font-variant-numeric: tabular-nums; line-height: 1; }
+.price small { display: block; font-family: "IBM Plex Sans", sans-serif; font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-top: 4px; }
+
+/* FOOTER */
+.site-foot { background: var(--night); color: var(--night-mute); padding: 58px 0 26px; }
+.foot-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 44px; padding-bottom: 34px; border-bottom: 1px solid var(--night-line); }
+.foot-grid p { font-size: 13.5px; line-height: 1.75; margin: 16px 0 0; max-width: 34ch; }
+.foot-bottom { padding-top: 20px; display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: #63758f; }
+
+/* REVEAL */
+.js .rise { opacity: 0; transform: translateY(14px); }
+.js .rise.in { opacity: 1; transform: none; transition: opacity .55s var(--ease), transform .55s var(--ease); }
+</style>
+</head>
+<body>
+<!-- ICON DEFS -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-comando" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="9.5" cy="14.5" r="6.2"/><path d="M13.9 10.1 19.5 4.5"/><circle cx="9.5" cy="14.5" r="1.7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-elevador" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5h18"/><path d="M5.5 15.5h13v3h-13z"/><path d="M12 12V3.5"/><path d="M8.6 6.9 12 3.5l3.4 3.4"/></symbol>
+  <symbol id="i-embreagem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h4.5a3 3 0 0 1 3 3v5.5a4.5 4.5 0 0 1-9 0V6a3 3 0 0 1 1.5-3z"/><path d="M11 16v5"/><path d="M7.5 21h7"/></symbol>
+  <symbol id="i-direcao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6V3.4M9.9 13.2 4.6 16.9M14.1 13.2 19.4 16.9"/></symbol>
+  <symbol id="i-transferencia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 21v-6.5a2 2 0 0 1 2-2H15"/><path d="M6.5 12.5V6a2 2 0 0 1 2-2H11"/><path d="M12.8 9.7 15.5 12.5 12.8 15.3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 13 4.3 7.6A2.4 2.4 0 0 1 6.6 6h10.8a2.4 2.4 0 0 1 2.3 1.6L21.5 13"/><path d="M2.5 13h19v4.4a1 1 0 0 1-1 1h-1.6a1 1 0 0 1-1-1v-1H6.1v1a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1z"/><circle cx="6.6" cy="16" r="1.3"/><circle cx="17.4" cy="16" r="1.3"/></symbol>
+</defs></svg>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <header class="site-head" id="head">
+    <div class="shell">
+      <a class="brand" href="#">
+        <svg viewBox="0 0 64 64" fill="none" style="color:#fff">
+          <path d="M47.4 33.3A18 18 0 1 1 36.2 21.1" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+          <path d="M30 38 50 14" stroke="var(--teal-lit)" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="30" cy="38" r="5.4" fill="currentColor"/>
+        </svg>
+        <span class="wm"><b>PCD Motors</b><span>MOBILIDADE SEM BARREIRAS</span></span>
+      </a>
+      <nav class="site-nav">
+        <a href="#catalogo" aria-current="page">Comprar</a>
+        <a href="#anunciar">Anunciar</a>
+      </nav>
+      <div class="head-cta">
+        <!-- ÁREA DE LOGIN (atualizada por JS se estiver logado) -->
+        <a class="btn btn-wire" href="login.html" id="btn-login-header">Entrar</a>
+        <a class="btn btn-teal" href="#">Anunciar grátis</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="hero-top">
+      <div>
+        <span class="eyebrow hero-eyebrow stage">Marketplace de veículos adaptados</span>
+        <h1>Pare de abrir 40 anúncios para nenhum deles servir.</h1>
+        <p class="hero-lead stage">Aqui a adaptação é o primeiro filtro — e o laudo do Detran é conferido antes do anúncio entrar no ar.</p>
+      </div>
+    </div>
+
+    <!-- INSTRUMENT -->
+    <section class="instrument stage" id="instrument">
+      <div class="inst-head">
+        <span class="eyebrow">Busca por adaptação</span>
+        <span class="live"><span class="dot"></span> Filtro ao vivo</span>
+      </div>
+
+      <div class="inst-body">
+        <div class="chips-pane">
+          <!-- Alerta de Recomendação de Perfil -->
+          <div id="recomendacao-alert" class="recom-alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span id="recomendacao-msg"></span>
+          </div>
+
+          <span class="eyebrow chips-label">Qual adaptação você precisa?</span>
+          <div class="chips" id="chips"></div>
+        </div>
+        <div class="readout">
+          <div class="count num" id="count">324</div>
+          <div class="cap" id="cap">veículos compatíveis</div>
+        </div>
+      </div>
+      <div class="strip-wrap"><div class="strip" id="strip"></div></div>
+    </section>
+  </div>
+</div>
+
+<!-- CATÁLOGO -->
+<section class="band" id="catalogo">
+  <div class="shell">
+    <div class="sec-head rise in">
+      <div>
+        <span class="eyebrow">Catálogo</span>
+        <h2>Anúncios verificados</h2>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-foot">
+  <div class="shell">
+    <div class="foot-bottom">
+      <span>© 2026 PCD Motors</span>
+      <span>Protótipo acadêmico</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  document.documentElement.classList.add("js");
+
+  /* --- DADOS (Mock) --- */
+  const ADAPT = {
+    comando:       { label: "Comando manual",        icon: "i-comando",       count: 142 },
+    elevador:      { label: "Elevador de cadeira",   icon: "i-elevador",      count: 58  },
+    embreagem:     { label: "Embreagem automatizada",icon: "i-embreagem",     count: 37  },
+    direcao:       { label: "Direção assistida",     icon: "i-direcao",       count: 61  },
+    transferencia: { label: "Banco de transferência",icon: "i-transferencia", count: 26  },
+  };
+  const TOTAL = 324;
+
+  const CARS = [
+    { m:"Fiat Doblô Adv 1.8", y:2021, km:38200, price:98900,  city:"Itapetininga", a:"comando",       c:"Auto" },
+    { m:"VW Voyage 1.6",      y:2019, km:62000, price:62300,  city:"Itapetininga", a:"comando",       c:"Manual" },
+    { m:"Chev. Onix Plus 1.0",y:2022, km:29800, price:89700,  city:"Tatuí",        a:"comando",       c:"Auto" },
+    { m:"Chev. Spin LTZ 1.8", y:2020, km:51400, price:84500,  city:"Sorocaba",     a:"elevador",      c:"Auto" },
+    { m:"Renault Kangoo 1.6", y:2018, km:78300, price:69900,  city:"Sorocaba",     a:"elevador",      c:"Manual" },
+    { m:"Ford Ka SE 1.0",     y:2019, km:57200, price:54800,  city:"Boituva",      a:"embreagem",     c:"Manual" },
+    { m:"Nissan Kicks S 1.6", y:2022, km:26400, price:103500, city:"Tatuí",        a:"transferencia", c:"Auto" },
+  ];
+
+  const brl = n => "R$ " + n.toLocaleString("pt-BR");
+  const kmf = n => n.toLocaleString("pt-BR");
+  const ico = id => `<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#${id}"></use></svg>`;
+
+  /* --- INICIA CHIPS --- */
+  let active = null;
+  const chipsEl = document.getElementById("chips");
+  chipsEl.innerHTML = Object.entries(ADAPT).map(([k, v]) => `
+    <button class="chip" type="button" data-k="${k}" aria-pressed="false">
+      ${ico(v.icon)}<span>${v.label}</span><span class="n">${v.count}</span>
+    </button>`).join("");
+
+  chipsEl.addEventListener("click", e => {
+    const b = e.target.closest(".chip");
+    if (b) select(b.dataset.k === active ? null : b.dataset.k);
+  });
+
+  function select(k) {
+    active = k;
+    chipsEl.querySelectorAll(".chip").forEach(c => {
+      const on = c.dataset.k === k;
+      c.setAttribute("aria-pressed", String(on));
+    });
+    
+    document.getElementById("count").textContent = k ? ADAPT[k].count : TOTAL;
+    document.getElementById("cap").textContent = k ? "veículos com " + ADAPT[k].label.toLowerCase() : "veículos compatíveis";
+    
+    // Atualiza listagens
+    strip();
+    renderGrid();
+  }
+
+  /* --- RENDERIZAÇÃO DAS LISTAS --- */
+  const stripEl = document.getElementById("strip");
+  function strip() {
+    const list = active ? CARS.filter(c => c.a === active) : CARS;
+    if (!list.length) { stripEl.innerHTML = `<p class="empty">Nenhum veículo no momento.</p>`; return; }
+    stripEl.innerHTML = list.slice(0, 4).map(c => `
+      <article class="mini">
+        <span class="mtag">${ico(ADAPT[c.a].icon)} ${ADAPT[c.a].label}</span>
+        <h4>${c.m}</h4>
+        <div class="mrow"><span>${c.y} · ${kmf(c.km)} km</span></div>
+        <div class="mrow"><span class="mprice">${brl(c.price)}</span></div>
+      </article>`).join("");
+  }
+
+  function renderGrid() {
+    const list = active ? CARS.filter(c => c.a === active) : CARS;
+    document.getElementById("grid").innerHTML = list.map((c, i) => `
+      <article class="card" style="animation-delay:${i * 50}ms; animation: cardIn .65s ease both;">
+        <div class="shot"><svg class="ghost" viewBox="0 0 24 24"><use href="#i-car"></use></svg><span class="seal">${ico("i-check")} Laudo conferido</span></div>
+        <div class="card-body">
+          <span class="adapt-tag">${ico(ADAPT[c.a].icon)} ${ADAPT[c.a].label}</span>
+          <h3>${c.m}</h3>
+          <div class="spec"><div><span>Ano</span><b>${c.y}</b></div><div><span>Km</span><b>${kmf(c.km)}</b></div><div><span>Câmbio</span><b>${c.c}</b></div></div>
+          <div class="card-foot"><span class="price">${brl(c.price)}</span></div>
+        </div>
+      </article>`).join("");
+  }
+
+  /* ============================================================
+     LÓGICA DE LOCAL STORAGE (Login e Filtro Automático)
+     ============================================================ */
+  function verificarEstadoUsuario() {
+    const isLoggedIn = localStorage.getItem('pcd_isLoggedIn');
+    const userName = localStorage.getItem('pcd_userName');
+    const filtroRecomendado = localStorage.getItem('pcd_filtroRecomendado');
+    
+    // 1. Atualiza cabeçalho se estiver logado
+    if (isLoggedIn === 'true' && userName) {
+      const btnLogin = document.getElementById('btn-login-header');
+      btnLogin.textContent = "Olá, " + userName.split(' ')[0]; // Pega o primeiro nome
+      btnLogin.href = "#"; // Evita ir pro login de novo
+      // Adiciona um botão de Sair (opcional para o mockup)
+      btnLogin.onclick = () => {
+        localStorage.clear();
+        location.reload();
+      };
+    }
+
+    // 2. Aplica filtro de recomendação baseado na deficiência cadastrada
+    if (filtroRecomendado && ADAPT[filtroRecomendado]) {
+      const alerta = document.getElementById('recomendacao-alert');
+      const msg = document.getElementById('recomendacao-msg');
+      
+      msg.innerHTML = `Com base no seu perfil, filtramos veículos com <b>${ADAPT[filtroRecomendado].label}</b>.`;
+      alerta.classList.add('show');
+      
+      // Seleciona automaticamente o filtro
+      select(filtroRecomendado);
+    } else {
+      // Se não tem recomendação, mostra tudo
+      select(null);
+    }
+  }
+
+  // Executa assim que a página carrega
+  verificarEstadoUsuario();
+
+})();
+</script>
+<style>
+@keyframes cardIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+</style>
+</body>
+</html>
